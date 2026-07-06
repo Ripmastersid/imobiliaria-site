@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Imobiliária - Encontre o imóvel dos seus sonhos. Casas, apartamentos e terrenos.">
+    <meta name="keywords" content="imóveis, casas, apartamentos, imobiliária, corretor, venda, locação">
+    <title>Imobiliária | Encontre o Imóvel dos Seus Sonhos</title>
+    
+    <!-- Favicon - Casa Dourada -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23d4af37' d='M50 10 L10 50 L20 50 L20 90 L40 90 L40 60 L60 60 L60 90 L80 90 L80 50 L90 50 Z'/%3E%3C/svg%3E">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://imobiliaria-site.vercel.app/">
+    <meta property="og:title" content="Imobiliária | Encontre o Imóvel dos Seus Sonhos">
+    <meta property="og:description" content="Casas, apartamentos e terrenos com as melhores condições.">
+    <meta property="og:image" content="https://imobiliaria-site.vercel.app/hero6.gif">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração de Cores -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0f1f33',
+                            800: '#1e3a5f',
+                            700: '#2e5a8f',
+                            600: '#3d7abf',
+                        },
+                        gold: {
+                            500: '#d4af37',
+                            400: '#e5c158',
+                            300: '#f0d77a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Estilos Customizados -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        /* Animações de Entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* Cards com TRANSITION */
+        .property-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .property-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 70px rgba(30, 58, 95, 0.25);
+            border-color: #d4af37;
+        }
+        
+        .property-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .property-card img {
+            transition: transform 0.6s ease;
+        }
+        
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 8px 32px rgba(30, 58, 95, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(30, 58, 95, 0.2);
+            border-color: #d4af37;
+        }
+        
+        /* Hero - SEM ESCURECER (GIF visível) */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(15, 31, 51, 0.3) 0%, rgba(30, 58, 95, 0.2) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Botão WhatsApp Flutuante */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(10deg);
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Formulário */
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .form-input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            outline: none;
+        }
+        
+        /* Scroll Suave */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Overlay Reflexivo */
+        .glass-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.7s ease;
+        }
+        
+        .glass-overlay:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-navy-900 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-navy-900 font-bold text-xl shadow-lg">
+                        🏠
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Imobiliária</h1>
+                        <p class="text-xs text-gold-400">Seu imóvel dos sonhos</p>
+                    </div>
+                </div>
+                
+                <!-- Menu Desktop -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#sobre" class="text-gray-300 hover:text-gold-400 transition font-medium">Sobre</a>
+                    <a href="#imoveis" class="text-gray-300 hover:text-gold-400 transition font-medium">Imóveis</a>
+                    <a href="#servicos" class="text-gray-300 hover:text-gold-400 transition font-medium">Serviços</a>
+                    <a href="#contato" class="text-gray-300 hover:text-gold-400 transition font-medium">Contato</a>
+                </nav>
+                
+                <!-- Botão CTA -->
+                <a href="https://wa.me/5521988663114?text=Olá!%20Gostaria%20de%20informações%20sobre%20imóveis." 
+                   target="_blank"
+                   class="bg-gold-500 text-navy-900 px-6 py-3 rounded-full font-bold hover:bg-gold-400 transition shadow-lg transform hover:scale-105">
+                    Falar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION - COM GIF SEM ESCURECER -->
+    <section class="hero-section relative min-h-screen flex items-center justify-center pt-20">
+        <!-- GIF de Fundo -->
+        <div class="absolute inset-0">
+            <img src="./hero6.gif" alt="Imóveis" class="w-full h-full object-cover">
+        </div>
+        
+        <!-- Conteúdo -->
+        <div class="hero-content relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="animate-fade-in-up">
+                <h1 class="text-6xl md:text-8xl font-extrabold text-white mb-6 leading-tight hero-text">
+                    Encontre o Imóvel<br>
+                    <span class="text-gold-400">dos Seus Sonhos</span>
+                </h1>
+                <p class="text-2xl md:text-3xl text-white mb-8 max-w-3xl mx-auto font-medium hero-text">
+                    Casas, apartamentos e terrenos com as melhores condições do mercado
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://wa.me/5521988663114?text=Olá!%20Quero%20ver%20os%20imóveis%20disponíveis." 
+                       target="_blank"
+                       class="bg-gold-500 text-navy-900 px-10 py-5 rounded-full text-xl font-extrabold hover:bg-gold-400 transition shadow-2xl transform hover:scale-110">
+                        Ver Imóveis Disponíveis
+                    </a>
+                    <a href="#imoveis" 
+                       class="bg-white/20 backdrop-blur-md text-white px-10 py-5 rounded-full text-xl font-bold hover:bg-white/30 transition border-2 border-white/40 hero-text">
+                        Conhecer Imóveis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE O CORRETOR -->
+    <section id="sobre" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Imagem -->
+                <div class="animate-fade-in-up delay-100">
+                    <div class="glass-card rounded-3xl overflow-hidden p-4">
+                        <img src="./foto1.png" alt="Corretor" class="w-full h-96 object-cover rounded-2xl">
+                    </div>
+                </div>
+                
+                <!-- Texto -->
+                <div class="animate-fade-in-up delay-200">
+                    <h2 class="text-5xl font-extrabold text-navy-900 mb-6">
+                        Sobre o <span class="text-gold-500">Corretor</span>
+                    </h2>
+                    <p class="text-lg text-gray-700 mb-4 font-medium leading-relaxed">
+                        Com mais de 10 anos de experiência no mercado imobiliário, ofereço atendimento personalizado e as melhores oportunidades de imóveis na região.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6 font-medium leading-relaxed">
+                        Minha missão é ajudar você a encontrar o imóvel perfeito, seja para morar ou investir, com segurança e transparência em cada etapa.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-6 rounded-2xl text-center transform transition hover:scale-105">
+                            <div class="text-4xl font-extrabold text-gold-500 mb-2">10+</div>
+                            <div class="text-sm text-gray-700 font-semibold">Anos de Experiência</div>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl text-center transform transition hover:scale-105">
+                            <div class="text-4xl font-extrabold text-gold-500 mb-2">500+</div>
+                            <div class="text-sm text-gray-700 font-semibold">Imóveis Vendidos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMÓVEIS EM DESTAQUE -->
+    <section id="imoveis" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-navy-900 mb-4">
+                    Imóveis em <span class="text-gold-500">Destaque</span>
+                </h2>
+                <p class="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
+                    Confira as melhores oportunidades selecionadas especialmente para você
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Imóvel 1 -->
+                <div class="property-card animate-fade-in-up delay-100">
+                    <div class="glass-overlay">
+                        <img src="./foto1.png" alt="Casa Moderna" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-gold-500 text-navy-900 px-3 py-1 rounded-full text-xs font-bold">VENDA</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 450.000</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Casa Moderna</h3>
+                        <p class="text-gray-600 font-medium mb-4">3 quartos • 2 banheiros • 120m²</p>
+                        <p class="text-gray-700 mb-4">Casa moderna em condomínio fechado com piscina e área de lazer completa.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20na%20Casa%20Moderna%20(R$450.000)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Imóvel 2 -->
+                <div class="property-card animate-fade-in-up delay-200">
+                    <div class="glass-overlay">
+                        <img src="./foto2.png" alt="Apartamento Luxo" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-gold-500 text-navy-900 px-3 py-1 rounded-full text-xs font-bold">VENDA</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 680.000</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Apartamento Luxo</h3>
+                        <p class="text-gray-600 font-medium mb-4">3 quartos • 3 banheiros • 150m²</p>
+                        <p class="text-gray-700 mb-4">Apartamento de alto padrão com vista para o mar e acabamento premium.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20no%20Apartamento%20Luxo%20(R$680.000)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Imóvel 3 -->
+                <div class="property-card animate-fade-in-up delay-300">
+                    <div class="glass-overlay">
+                        <img src="./foto3.png" alt="Cobertura" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-gold-500 text-navy-900 px-3 py-1 rounded-full text-xs font-bold">VENDA</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 950.000</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Cobertura Duplex</h3>
+                        <p class="text-gray-600 font-medium mb-4">4 quartos • 4 banheiros • 200m²</p>
+                        <p class="text-gray-700 mb-4">Cobertura duplex com terraço gourmet e vista panorâmica da cidade.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20na%20Cobertura%20Duplex%20(R$950.000)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Imóvel 4 -->
+                <div class="property-card animate-fade-in-up delay-100">
+                    <div class="glass-overlay">
+                        <img src="./foto1.png" alt="Casa Família" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-navy-800 text-white px-3 py-1 rounded-full text-xs font-bold">LOCAÇÃO</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 2.500/mês</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Casa Família</h3>
+                        <p class="text-gray-600 font-medium mb-4">3 quartos • 2 banheiros • 110m²</p>
+                        <p class="text-gray-700 mb-4">Casa espaçosa para família em bairro residencial tranquilo e seguro.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20na%20Casa%20Família%20(Aluguel)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Imóvel 5 -->
+                <div class="property-card animate-fade-in-up delay-200">
+                    <div class="glass-overlay">
+                        <img src="./foto2.png" alt="Studio" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-navy-800 text-white px-3 py-1 rounded-full text-xs font-bold">LOCAÇÃO</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 1.800/mês</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Studio Moderno</h3>
+                        <p class="text-gray-600 font-medium mb-4">1 quarto • 1 banheiro • 45m²</p>
+                        <p class="text-gray-700 mb-4">Studio moderno e mobiliado, perfeito para jovens profissionais.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20no%20Studio%20Moderno%20(Aluguel)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Imóvel 6 -->
+                <div class="property-card animate-fade-in-up delay-300">
+                    <div class="glass-overlay">
+                        <img src="./foto3.png" alt="Terreno" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-gold-500 text-navy-900 px-3 py-1 rounded-full text-xs font-bold">VENDA</span>
+                            <span class="text-gold-500 font-bold text-lg">R$ 280.000</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-navy-900 mb-2">Terreno 500m²</h3>
+                        <p class="text-gray-600 font-medium mb-4">500m² • Plano • Escriturado</p>
+                        <p class="text-gray-700 mb-4">Terreno plano em condomínio fechado, pronto para construir sua casa dos sonhos.</p>
+                        <a href="https://wa.me/5521988663114?text=Olá!%20Tenho%20interesse%20no%20Terreno%20500m²%20(R$280.000)" 
+                           target="_blank"
+                           class="block w-full bg-navy-800 text-white text-center py-3 rounded-lg font-bold hover:bg-navy-900 transition">
+                            Tenho Interesse
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="py-20 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-4">
+                    Nossos <span class="text-gold-400">Serviços</span>
+                </h2>
+                <p class="text-xl text-gray-300 font-medium">
+                    Soluções completas para você realizar seu sonho imobiliário
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-8 rounded-2xl text-center animate-fade-in-up delay-100 transform transition hover:scale-105">
+                    <div class="text-5xl mb-4">🏠</div>
+                    <h3 class="text-xl font-bold text-navy-900 mb-2">Compra de Imóveis</h3>
+                    <p class="text-gray-700 font-medium text-sm">Encontre o imóvel ideal com as melhores condições de pagamento</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center animate-fade-in-up delay-200 transform transition hover:scale-105">
+                    <div class="text-5xl mb-4">💰</div>
+                    <h3 class="text-xl font-bold text-navy-900 mb-2">Venda de Imóveis</h3>
+                    <p class="text-gray-700 font-medium text-sm">Venda seu imóvel pelo melhor preço com segurança e agilidade</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center animate-fade-in-up delay-300 transform transition hover:scale-105">
+                    <div class="text-5xl mb-4">🔑</div>
+                    <h3 class="text-xl font-bold text-navy-900 mb-2">Locação</h3>
+                    <p class="text-gray-700 font-medium text-sm">Aluguel residencial e comercial com contratos seguros</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center animate-fade-in-up delay-400 transform transition hover:scale-105">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold text-navy-900 mb-2">Avaliação</h3>
+                    <p class="text-gray-700 font-medium text-sm">Avaliação profissional do valor do seu imóvel no mercado</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-navy-900 mb-4">
+                    O que nossos <span class="text-gold-500">Clientes</span> dizem
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl animate-fade-in-up delay-100 transform transition hover:scale-105">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-2xl">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="text-gray-700 mb-4 font-medium">"Excelente atendimento! Encontrei o apartamento dos meus sonhos em menos de 1 mês. Super recomendo!"</p>
+                    <div class="font-bold text-navy-900">- Carlos Silva</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl animate-fade-in-up delay-200 transform transition hover:scale-105">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-2xl">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="text-gray-700 mb-4 font-medium">"Vendi meu imóvel em tempo recorde e por um preço melhor do que esperava. Profissionalismo total!"</p>
+                    <div class="font-bold text-navy-900">- Ana Santos</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl animate-fade-in-up delay-300 transform transition hover:scale-105">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-2xl">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="text-gray-700 mb-4 font-medium">"Atendimento personalizado e muita paciência para entender o que eu precisava. Nota 10!"</p>
+                    <div class="font-bold text-navy-900">- Roberto Oliveira</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO COM FORMULÁRIO -->
+    <section id="contato" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 md:p-12 animate-fade-in-up">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-5xl font-extrabold text-navy-900 mb-6">
+                            Entre em <span class="text-gold-500">Contato</span>
+                        </h2>
+                        <p class="text-lg text-gray-700 mb-8 font-medium">
+                            Preencha o formulário ou entre em contato direto pelo WhatsApp. Estamos prontos para ajudar!
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center text-navy-900 text-xl shadow-lg">📍</div>
+                                <div>
+                                    <div class="font-bold text-navy-900">Endereço</div>
+                                    <div class="text-gray-700 font-medium">Rua Exemplo, 123 - Centro</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center text-navy-900 text-xl shadow-lg">📞</div>
+                                <div>
+                                    <div class="font-bold text-navy-900">Telefone</div>
+                                    <div class="text-gray-700 font-medium">(21) 98866-3114</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center text-navy-900 text-xl shadow-lg">🕐</div>
+                                <div>
+                                    <div class="font-bold text-navy-900">Horário</div>
+                                    <div class="text-gray-700 font-medium">Seg-Sáb: 9h às 18h</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Formulário -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-navy-900 mb-6">Envie sua mensagem</h3>
+                        <form action="https://wa.me/5521988663114" method="GET" target="_blank" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nome completo</label>
+                                <input type="text" name="text" placeholder="Seu nome" class="form-input w-full px-4 py-3 rounded-lg" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
+                                <input type="tel" placeholder="(21) 99999-9999" class="form-input w-full px-4 py-3 rounded-lg" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de imóvel</label>
+                                <select class="form-input w-full px-4 py-3 rounded-lg">
+                                    <option>Casa</option>
+                                    <option>Apartamento</option>
+                                    <option>Terreno</option>
+                                    <option>Comercial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mensagem</label>
+                                <textarea rows="3" placeholder="Conte o que você procura..." class="form-input w-full px-4 py-3 rounded-lg"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-gold-500 text-navy-900 py-4 rounded-lg font-bold hover:bg-gold-400 transition transform hover:scale-105 shadow-lg">
+                                Enviar pelo WhatsApp
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-navy-900 font-bold text-xl shadow-lg">
+                            🏠
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Imobiliária</h3>
+                            <p class="text-sm text-gold-400">Seu imóvel dos sonhos</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">
+                        Realizando sonhos imobiliários com profissionalismo e transparência há mais de 10 anos.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#sobre" class="hover:text-gold-400 transition">Sobre</a></li>
+                        <li><a href="#imoveis" class="hover:text-gold-400 transition">Imóveis</a></li>
+                        <li><a href="#servicos" class="hover:text-gold-400 transition">Serviços</a></li>
+                        <li><a href="#contato" class="hover:text-gold-400 transition">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>📍 Rua Exemplo, 123</li>
+                        <li>📞 (21) 98866-3114</li>
+                        <li>✉️ contato@imobiliaria.com.br</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-navy-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2026 Imobiliária. Todos os direitos reservados.</p>
+                <p class="text-sm mt-2">Template by <span class="text-gold-400 font-bold">Sidmarkting</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÃO WHATSAPP FLUTUANTE -->
+    <a href="https://wa.me/5521988663114?text=Olá!%20Gostaria%20de%20informações%20sobre%20imóveis." 
+       target="_blank"
+       class="whatsapp-float bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </a>
+
+</body>
+  </html>
